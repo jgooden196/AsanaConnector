@@ -8,15 +8,11 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger()
 
+# Dictionary to store webhook secret dynamically
 WEBHOOK_SECRET = {}
 
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
-    # Handle Asana's webhook handshake
-    if 'X-Hook-Secret' in request.headers:
-        secret = request.headers['X-Hook-Secret']
-        WEBHOOK_SECRET['secret'] = secret  # Store secret dynamically
-        response = jsonify({})
-        response.headers['X-Hook-Secret'] = secret
-        logger.info(f"Webhook Handshake Successful: {secret}")
-        sys.stdout.flush(
+    """Handles incoming webhook requests from Asana"""
+
+    # Check if
