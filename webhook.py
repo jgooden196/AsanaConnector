@@ -1,12 +1,21 @@
+import os
 import logging
 import sys
 from flask import Flask, request, jsonify
+from asana import Client
 
 app = Flask(__name__)
 
 # Configure logging to ensure Railway logs appear
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger()
+
+# Asana API setup
+asana_token = os.environ.get('ASANA_TOKEN')
+client = Client.access_token(asana_token)
+
+# Your Asana project ID
+project_id = '1209353707682767'
 
 # Dictionary to store webhook secret dynamically
 WEBHOOK_SECRET = {}
@@ -36,4 +45,4 @@ def handle_webhook():
     return jsonify({"status": "received"}), 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
