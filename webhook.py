@@ -1,6 +1,10 @@
+import logging
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 WEBHOOK_SECRET = {}
 
@@ -12,11 +16,12 @@ def handle_webhook():
         WEBHOOK_SECRET['secret'] = secret  # Store secret dynamically
         response = jsonify({})
         response.headers['X-Hook-Secret'] = secret
+        logging.info(f"Webhook Handshake Successful: {secret}")
         return response, 200
 
     # Process incoming webhook event
     data = request.json
-    print("Received Asana Event:", data)
+    logging.info(f"Received Asana Event: {data}")  # Force log output
     return jsonify({"status": "received"}), 200
 
 if __name__ == '__main__':
